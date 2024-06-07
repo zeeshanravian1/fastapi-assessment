@@ -14,6 +14,7 @@ from sqlalchemy import Engine, MetaData, engine_from_config, pool
 
 from fastapi_assessment.core.config import core_configuration
 from fastapi_assessment.database.connection import my_metadata
+from fastapi_assessment.models.post import PostTable  # noqa
 from fastapi_assessment.models.role import RoleTable  # noqa
 from fastapi_assessment.models.user import UserTable  # noqa
 

@@ -37,3 +37,6 @@ class UserTable(BaseTable):
     role: Mapped[RoleTable] = relationship(
         back_populates="users", lazy="subquery"
     )
+    posts: Mapped[list["PostTable"]] = relationship(  # noqa: F821
+        back_populates="role"
+    )
