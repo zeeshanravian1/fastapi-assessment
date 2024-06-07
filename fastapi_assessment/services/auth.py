@@ -41,7 +41,7 @@ class AuthService(BaseService):
         super().__init__(AuthRepository)
 
     def register(
-        self, db_session: Session, record=RegisterSchema
+        self, db_session: Session, record: RegisterSchema
     ) -> RegisterReadSchema:
         """
         Register Service
@@ -51,7 +51,7 @@ class AuthService(BaseService):
 
         Args:
         - `db_session (Session)`: Database session.
-        - `form_data (OAuth2PasswordRequestForm)`: Form data.
+        - `record (RegisterSchema)`: User details.
 
         Returns:
         - User details.

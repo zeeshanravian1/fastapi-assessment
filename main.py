@@ -15,13 +15,14 @@ from fastapi.staticfiles import StaticFiles
 
 from fastapi_assessment.core.config import core_configuration
 from fastapi_assessment.core.helper import custom_generate_unique_id
-from fastapi_assessment.core.middlewares import exception_handling
+from fastapi_assessment.core.middlewares import (
+    exception_handling,
+    validate_payload_size,
+)
 from fastapi_assessment.routers.routes import router
-
 
 app = FastAPI(
     docs_url=core_configuration.DOCS_URL,
-    redoc_url=core_configuration.REDOC_URL,
     generate_unique_id_function=custom_generate_unique_id,
     title=core_configuration.PROJECT_TITLE,
     description=core_configuration.PROJECT_DESCRIPTION,
@@ -43,6 +44,7 @@ app.add_middleware(
 
 # Custom http middleware
 app.middleware(middleware_type="http")(exception_handling)
+app.middleware(middleware_type="http")(validate_payload_size)
 
 
 @app.get(

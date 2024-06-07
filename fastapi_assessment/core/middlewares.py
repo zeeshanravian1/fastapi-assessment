@@ -16,6 +16,7 @@ from fastapi.responses import JSONResponse
 from jose import ExpiredSignatureError, JWTError
 from sqlalchemy.exc import IntegrityError
 
+from ..constants.base import MAX_CONTENT_LENGTH
 from ..response_messages.core import core_response_message
 
 exception_logger: logging.Logger = logging.getLogger(__name__)
@@ -25,6 +26,38 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.ERROR)
 
 exception_logger.addHandler(console_handler)
+
+
+async def validate_payload_size(
+    request: Request, call_next
+) -> JSONResponse | Any | Response:
+    """
+    Validate Payload Size Middleware
+
+    Description:
+    - This function is used to check the size of the request body.
+
+    Parameter:
+    - **request** (Request): Request object. **(Required)**
+    - **call_next** (Callable): Next function to be called. **(Required)**
+
+    Return:
+    - **response** (Response): Response object.
+
+    """
+
+    # Check the size of the request body
+    # If it is greater than 1MB then return 413 status code
+    if int(request.headers.get("content-length", 0)) > MAX_CONTENT_LENGTH:
+        content: dict[str, str] = {
+            "detail": core_response_message.PAYLOAD_TOO_LARGE
+        }
+        return JSONResponse(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            content=content,
+        )
+
+    return await call_next(request)
 
 
 async def exception_handling(

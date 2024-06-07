@@ -55,9 +55,7 @@ async def register(
 
     """
 
-    user: RegisterReadSchema = AuthService().register(db_session, record)
-
-    return user
+    return AuthService().register(db_session, record)
 
 
 # Login route

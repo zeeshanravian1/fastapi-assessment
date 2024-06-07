@@ -33,7 +33,7 @@ async def create_role(
     record: RoleCreateSchema,
     db_session: Session = Depends(get_session),
     current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
-        get_current_active_user, scopes=["role:read"]
+        get_current_active_user, scopes=["role:create"]
     ),
 ) -> RoleReadSchema:
     """
@@ -74,6 +74,9 @@ async def create_role(
 async def get_role_by_id(
     role_id: int,
     db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["role:read"]
+    ),
 ) -> RoleReadSchema:
     """
     Get a single role
@@ -149,6 +152,9 @@ async def update_role(
     role_id: int,
     record: RoleUpdateSchema,
     db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["role:update"]
+    ),
 ) -> RoleReadSchema:
     """
     Update a single role
@@ -195,6 +201,9 @@ async def update_role(
 async def delete_role(
     role_id: int,
     db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["role:delete"]
+    ),
 ) -> None:
     """
     Delete a single role

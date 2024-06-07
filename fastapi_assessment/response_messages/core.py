@@ -6,6 +6,8 @@ Description:
 
 """
 
+from ..constants.base import MAX_CONTENT_LENGTH
+
 
 class CoreResponseMessage:
     """
@@ -21,6 +23,10 @@ class CoreResponseMessage:
     INTEGRITY_ERROR: str = "Integrity error"
     INVALID_RESPONSE_BODY: str = "Invalid response body"
     INTERNAL_SERVER_ERROR: str = "Internal server error"
+    PAYLOAD_TOO_LARGE: str = (
+        "Payload too large."
+        + f"Maximum content length is {MAX_CONTENT_LENGTH} bytes"
+    )
 
 
 core_response_message = CoreResponseMessage()

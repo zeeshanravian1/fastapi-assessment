@@ -30,6 +30,4 @@ class PostTable(BaseTable):
     )
 
     # Relationships
-    user: Mapped[UserTable] = relationship(
-        back_populates="posts", lazy="subquery"
-    )
+    user: Mapped[UserTable] = relationship(back_populates="posts")

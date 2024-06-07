@@ -7,14 +7,20 @@ Description:
 
 """
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Security, status
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 
+from ..core.security import get_current_active_user
 from ..database.session import get_session
 from ..models.user import UserTable
 from ..response_messages.user import user_response_message
-from ..schemas.user import UserCreateSchema, UserReadSchema, UserUpdateSchema
+from ..schemas.user import (
+    CurrentUserReadSchema,
+    UserCreateSchema,
+    UserReadSchema,
+    UserUpdateSchema,
+)
 from ..services.user import UserService
 
 router = APIRouter(prefix="/user", tags=["User"])
@@ -30,6 +36,9 @@ router = APIRouter(prefix="/user", tags=["User"])
 async def create_user(
     record: UserCreateSchema,
     db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["user:create"]
+    ),
 ) -> UserReadSchema:
     """
     Create a single user
@@ -74,6 +83,9 @@ async def create_user(
 async def get_user_by_id(
     user_id: int,
     db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["user:read"]
+    ),
 ) -> UserReadSchema:
     """
     Get a single user
@@ -118,6 +130,9 @@ async def get_user_by_id(
 )
 async def get_all_users(
     db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["user:read"]
+    ),
 ):
     """
     Get all users
@@ -153,6 +168,9 @@ async def update_user(
     user_id: int,
     record: UserUpdateSchema,
     db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["user:update"]
+    ),
 ) -> UserReadSchema:
     """
     Update a single user
@@ -204,6 +222,9 @@ async def update_user(
 async def delete_user(
     user_id: int,
     db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["user:delete"]
+    ),
 ) -> None:
     """
     Delete a single user

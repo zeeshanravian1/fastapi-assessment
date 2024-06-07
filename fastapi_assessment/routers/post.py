@@ -7,14 +7,16 @@ Description:
 
 """
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Security, status
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 
+from ..core.security import get_current_active_user
 from ..database.session import get_session
 from ..models.post import PostTable
 from ..response_messages.post import post_response_message
 from ..schemas.post import PostCreateSchema, PostReadSchema, PostUpdateSchema
+from ..schemas.user import CurrentUserReadSchema
 from ..services.post import PostService
 
 router = APIRouter(prefix="/post", tags=["Post"])
@@ -30,6 +32,9 @@ router = APIRouter(prefix="/post", tags=["Post"])
 async def create_post(
     record: PostCreateSchema,
     db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["post:create"]
+    ),
 ) -> PostReadSchema:
     """
     Create a single post
@@ -67,6 +72,9 @@ async def create_post(
 async def get_post_by_id(
     post_id: int,
     db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["post:read"]
+    ),
 ) -> PostReadSchema:
     """
     Get a single post
@@ -108,6 +116,9 @@ async def get_post_by_id(
 )
 async def get_all_posts(
     db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["post:read"]
+    ),
 ):
     """
     Get all posts
@@ -129,6 +140,44 @@ async def get_all_posts(
     return result
 
 
+# Get all posts by user id route
+@router.get(
+    path="/all/user",
+    status_code=status.HTTP_200_OK,
+    summary="Get all posts by user id",
+    response_description="All posts fetched successfully",
+)
+async def get_all_posts_by_user_id(
+    db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["post:read"]
+    ),
+):
+    """
+    Get all posts by user id
+
+    Description:
+    - This route is used to get all posts by user id.
+
+    Parameter:
+    - **user_id** (INT): ID of user. **(Required)**
+
+    Return:
+    Get all posts with following information:
+    - **id** (INT): Id of post.
+    - **text** (STR): Text of post.
+    - **created_at** (DATETIME): Datetime of post creation.
+    - **updated_at** (DATETIME): Datetime of post updation.
+
+    """
+
+    result: list[PostTable] = PostService().read_all_by_user_id(
+        db_session=db_session, user_id=current_user.id
+    )
+
+    return result
+
+
 # Update a single post route
 @router.put(
     path="/{post_id}",
@@ -140,6 +189,9 @@ async def update_post(
     post_id: int,
     record: PostUpdateSchema,
     db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["post:update"]
+    ),
 ) -> PostReadSchema:
     """
     Update a single post
@@ -184,6 +236,9 @@ async def update_post(
 async def delete_post(
     post_id: int,
     db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["post:delete"]
+    ),
 ) -> None:
     """
     Delete a single post
