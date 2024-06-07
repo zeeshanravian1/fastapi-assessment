@@ -14,6 +14,10 @@ from sqlalchemy import Engine, MetaData, engine_from_config, pool
 
 from fastapi_assessment.core.config import core_configuration
 from fastapi_assessment.database.connection import my_metadata
+from fastapi_assessment.database.init_database import (
+    create_roles,
+    create_super_admin,
+)
 from fastapi_assessment.models.post import PostTable  # noqa
 from fastapi_assessment.models.role import RoleTable  # noqa
 from fastapi_assessment.models.user import UserTable  # noqa
@@ -85,6 +89,12 @@ def run_migrations_online() -> None:
 
         with context.begin_transaction():  # pylint: disable=E1101
             context.run_migrations()  # pylint: disable=E1101
+
+            # Create roles
+            create_roles()
+
+            # Create super admin
+            create_super_admin()
 
 
 if context.is_offline_mode():  # pylint: disable=E1101
