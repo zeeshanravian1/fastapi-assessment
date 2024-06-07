@@ -18,7 +18,7 @@ class UserRepository(
     User Repository
 
     Description:
-        - This is used to interact with user table.
+    - This is used to interact with user table.
 
     """
 
@@ -27,7 +27,7 @@ class UserRepository(
         User Repository Constructor
 
         Description:
-            - This is used to initialize user repository.
+        - This is used to initialize user repository.
 
         """
 

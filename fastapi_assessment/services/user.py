@@ -20,7 +20,7 @@ class UserService(BaseService):
     User Service
 
     Description:
-        - This is used to interact with user repository.
+    - This is used to interact with user repository.
 
     """
 

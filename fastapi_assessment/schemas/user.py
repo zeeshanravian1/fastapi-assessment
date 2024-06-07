@@ -9,6 +9,7 @@ Description:
 from pydantic import BaseModel, EmailStr, Field, field_validator
 from pydantic_settings import SettingsConfigDict
 
+from ..constants.role import ROLE_NAME
 from ..constants.user import EMAIL, NAME, PASSWORD, ROLE_ID, USERNAME
 from .base import BaseReadSchema
 from .validators import lowercase_email, password_validator, username_validator
@@ -30,6 +31,7 @@ class UserBaseSchema(BaseModel):
     email: EmailStr | None = Field(
         min_length=1, max_length=2_55, examples=[EMAIL]
     )
+    is_active: bool | None = Field(examples=[True])
     role_id: int | None = Field(ge=1, examples=[ROLE_ID])
 
     # Custom Validators
@@ -88,3 +90,15 @@ class UserUpdateSchema(UserBaseSchema):
         min_length=1, max_length=2_55, examples=[EMAIL]
     )
     role_id: int | None = Field(ge=1, examples=[ROLE_ID])
+
+
+class CurrentUserReadSchema(UserReadSchema):
+    """
+    Current User Read Schema
+
+    Description:
+    - This schema is used to validate current user data.
+
+    """
+
+    role_name: str = Field(examples=[ROLE_NAME])

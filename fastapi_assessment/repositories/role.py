@@ -18,7 +18,7 @@ class RoleRepository(
     Role Repository
 
     Description:
-        - This is used to interact with role table.
+    - This is used to interact with role table.
 
     """
 
@@ -27,7 +27,7 @@ class RoleRepository(
         Role Repository Constructor
 
         Description:
-            - This is used to initialize role repository.
+        - This is used to initialize role repository.
 
         """
 

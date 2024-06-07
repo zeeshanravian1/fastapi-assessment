@@ -7,14 +7,16 @@ Description:
 
 """
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Security, status
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 
+from ..core.security import get_current_active_user
 from ..database.session import get_session
 from ..models.role import RoleTable
 from ..response_messages.role import role_response_message
 from ..schemas.role import RoleCreateSchema, RoleReadSchema, RoleUpdateSchema
+from ..schemas.user import CurrentUserReadSchema
 from ..services.role import RoleService
 
 router = APIRouter(prefix="/role", tags=["Role"])
@@ -30,6 +32,9 @@ router = APIRouter(prefix="/role", tags=["Role"])
 async def create_role(
     record: RoleCreateSchema,
     db_session: Session = Depends(get_session),
+    current_user: CurrentUserReadSchema = Security(  # pylint: disable=W0613
+        get_current_active_user, scopes=["role:read"]
+    ),
 ) -> RoleReadSchema:
     """
     Create a single role
