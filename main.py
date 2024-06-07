@@ -16,6 +16,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi_assessment.core.config import core_configuration
 from fastapi_assessment.core.helper import custom_generate_unique_id
 from fastapi_assessment.core.middlewares import exception_handling
+from fastapi_assessment.routers.routes import router
+
 
 app = FastAPI(
     docs_url=core_configuration.DOCS_URL,
@@ -132,3 +134,7 @@ async def custom_redoc_ui_html() -> HTMLResponse:
         title=app.title + " - ReDoc",
         redoc_js_url="/static/redoc.standalone.js",
     )
+
+
+# Add all file routes to app
+app.include_router(router)

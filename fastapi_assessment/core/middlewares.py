@@ -64,7 +64,7 @@ async def exception_handling(
         if err_message.startswith("Duplicate entry"):
             values: list[str] = re.findall(r"'(.*?)'", err_message)
             detail: str = (
-                f"{values[0]}={values[1].split(".")[-1]} already exists"
+                f"{values[0]}={values[1].split('.')[-1]} already exists"
             )
 
         elif err_message.endswith("cannot be null"):

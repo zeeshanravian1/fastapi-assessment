@@ -30,6 +30,31 @@ class CoreConfiguration(BaseSettings):
     DB_PASSWORD: str
     DB_NAME: str
 
+    @property
+    def DATABASE_URL(self) -> str:  # pylint: disable=C0103
+        """
+        Database URL
+
+        Description:
+        - This property is used to generate database URL.
+
+        """
+        return "".join(
+            [
+                self.DATABASE,
+                "://",
+                self.DB_USER,
+                ":",
+                self.DB_PASSWORD,
+                "@",
+                self.DB_HOST,
+                ":",
+                str(self.DB_PORT),
+                "/",
+                self.DB_NAME,
+            ]
+        )
+
     # Project Configuration
 
     CORS_ALLOW_ORIGINS: str
