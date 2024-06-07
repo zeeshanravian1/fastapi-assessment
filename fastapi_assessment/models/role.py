@@ -7,7 +7,7 @@ Description:
 """
 
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ..database.connection import BaseTable
 
@@ -23,3 +23,8 @@ class RoleTable(BaseTable):
 
     role_name: Mapped[str] = mapped_column(String(2_55), unique=True)
     role_description: Mapped[str] = mapped_column(String(2_55), nullable=True)
+
+    # Relationships
+    users: Mapped[list["UserTable"]] = relationship(  # noqa: F821
+        back_populates="role"
+    )

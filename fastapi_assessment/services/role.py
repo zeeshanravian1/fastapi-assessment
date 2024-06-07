@@ -15,7 +15,7 @@ class RoleService(BaseService):
     Role Service
 
     Description:
-        - This is used to interact with role repository.
+    - This is used to interact with role repository.
 
     """
 
@@ -24,7 +24,7 @@ class RoleService(BaseService):
         Role Service Constructor
 
         Description:
-            - Initializes Role Service object
+        - Initializes Role Service object
 
         """
 
