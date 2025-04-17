@@ -96,7 +96,7 @@ class BaseUpdate(SQLModel, Generic[Model]):
     - This class provides a generic update model for all tables.
 
     :Attributes:
-    - `id` (UUID | int): Unique identifier for the record.
+    - `id` (UUID | int): Unique identifier for record.
     """
 
     id: UUID | int

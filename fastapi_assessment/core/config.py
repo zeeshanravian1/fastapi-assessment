@@ -8,6 +8,7 @@ environment file.
 
 import secrets
 import warnings
+from enum import Enum
 from typing import Annotated, Literal, Self
 
 from pydantic import (
@@ -192,6 +193,18 @@ class Settings(BaseSettings):
         )
 
         return self
+
+
+class TokenType(str, Enum):
+    """Token Type Enum.
+
+    :Description:
+    - This enum is used to define token type.
+
+    """
+
+    ACCESS_TOKEN = "access_token"  # nosec B105
+    REFRESH_TOKEN = "refresh_token"  # nosec B105
 
 
 settings = Settings()  # type: ignore[call-arg]

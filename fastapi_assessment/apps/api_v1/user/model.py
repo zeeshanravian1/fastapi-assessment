@@ -8,7 +8,7 @@ Description:
 from collections.abc import Sequence
 
 from pydantic import EmailStr
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 from fastapi_assessment.apps.base.model import (
     BasePaginationData,
@@ -89,6 +89,9 @@ class User(Base, UserBase, table=True):
                 False,
             ]
         },
+    )
+    blogs: list["Blog"] = Relationship(  # type: ignore # noqa: F821
+        back_populates="author", cascade_delete=True
     )
 
 

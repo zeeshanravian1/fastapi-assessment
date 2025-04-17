@@ -15,6 +15,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi_assessment.apps.route import router
 from fastapi_assessment.core.config import settings
 from fastapi_assessment.core.helper import custom_generate_unique_id
+from fastapi_assessment.core.middlewares import exception_handling
 from fastapi_assessment.database.connection import Base, engine
 
 # Create database tables
@@ -39,6 +40,9 @@ app.add_middleware(
     allow_headers=settings.BACKEND_CORS_HEADERS,
     allow_credentials=True,
 )
+
+# Custom http middleware
+app.middleware(middleware_type="http")(exception_handling)
 
 
 @app.get(

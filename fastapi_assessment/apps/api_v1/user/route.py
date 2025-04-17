@@ -14,6 +14,7 @@ from fastapi.responses import ORJSONResponse
 
 from fastapi_assessment.apps.api_v1.user.service import UserService
 from fastapi_assessment.apps.base.model import BasePaginationData, Message
+from fastapi_assessment.core.security import CurrentUser
 from fastapi_assessment.database.session import DBSession
 
 from .model import (
@@ -139,6 +140,7 @@ async def create_users(
 async def read_users_by_ids(
     db_session: DBSession,
     user_ids: Annotated[list[UUID], Query(...)],
+    _: CurrentUser,
     user_service: UserService = Depends(lambda: UserService(model=User)),
 ) -> UserBulkRead:
     """Retrieve multiple users by IDs.
@@ -182,6 +184,7 @@ async def read_users_by_ids(
 async def read_user_by_id(
     db_session: DBSession,
     user_id: Annotated[UUID, "User ID"],
+    _: CurrentUser,
     user_service: UserService = Depends(lambda: UserService(model=User)),
 ) -> UserRead:
     """Retrieve a single user by ID.
@@ -233,6 +236,7 @@ async def read_user_by_id(
 )
 async def read_users(
     db_session: DBSession,
+    _: CurrentUser,
     order_by: str | None = None,
     desc: bool = False,
     page: int | None = None,
@@ -285,6 +289,7 @@ async def update_user_by_id(
     db_session: DBSession,
     user_id: Annotated[UUID, "User ID"],
     record: UserUpdate,
+    _: CurrentUser,
     user_service: UserService = Depends(lambda: UserService(model=User)),
 ) -> UserRead:
     """Update a single user by ID.
@@ -344,6 +349,7 @@ async def update_user_by_id(
 async def update_users_by_ids(
     db_session: DBSession,
     records: list[UserBulkUpdate],
+    _: CurrentUser,
     user_service: UserService = Depends(lambda: UserService(model=User)),
 ) -> UserBulkRead:
     """Update multiple users by IDs.
@@ -395,6 +401,7 @@ async def patch_user_by_id(
     db_session: DBSession,
     user_id: Annotated[UUID, "User ID"],
     record: UserPatch,
+    _: CurrentUser,
     user_service: UserService = Depends(lambda: UserService(model=User)),
 ) -> UserRead:
     """Patch a single user by ID.
@@ -454,6 +461,7 @@ async def patch_user_by_id(
 async def patch_users_by_ids(
     db_session: DBSession,
     records: list[UserBulkPatch],
+    _: CurrentUser,
     user_service: UserService = Depends(lambda: UserService(model=User)),
 ) -> UserBulkRead:
     """Patch multiple users by IDs.
@@ -504,6 +512,7 @@ async def patch_users_by_ids(
 async def delete_user_by_id(
     db_session: DBSession,
     user_id: Annotated[UUID, "User ID"],
+    _: CurrentUser,
     user_service: UserService = Depends(lambda: UserService(model=User)),
 ) -> None:
     """Delete a single user by ID.
@@ -542,6 +551,7 @@ async def delete_user_by_id(
 async def delete_users_by_ids(
     db_session: DBSession,
     user_ids: Annotated[list[UUID], Query(...)],
+    _: CurrentUser,
     user_service: UserService = Depends(lambda: UserService(model=User)),
 ) -> None:
     """Delete multiple users by IDs.
