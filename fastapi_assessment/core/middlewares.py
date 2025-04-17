@@ -104,7 +104,7 @@ async def exception_handling(
                 "success": False,
                 "message": core_response_message.INTERNAL_SERVER_ERROR,
                 "data": None,
-                "error": core_response_message.INTERNAL_SERVER_ERROR,
+                "error": str(err),
             },
         )
     return response

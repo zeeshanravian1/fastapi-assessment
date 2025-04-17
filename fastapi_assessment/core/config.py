@@ -115,6 +115,11 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 1 days
     REFRESH_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
 
+    # Cache Configuration
+
+    REDIS_HOST: str
+    REDIS_PORT: int
+
     # SMTP Configuration
 
     SMTP_TLS: bool = True

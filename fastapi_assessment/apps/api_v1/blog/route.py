@@ -14,6 +14,7 @@ from fastapi.responses import ORJSONResponse
 
 from fastapi_assessment.apps.api_v1.blog.service import BlogService
 from fastapi_assessment.apps.base.model import BasePaginationData, Message
+from fastapi_assessment.core.cache import get_cached_data, set_cached_data
 from fastapi_assessment.core.security import CurrentUser
 from fastapi_assessment.database.session import DBSession
 
@@ -242,6 +243,17 @@ async def read_blogs(
     - `updated_at` (datetime): Datetime of blog updation.
 
     """
+    # Try to get from cache first
+    cache_key: str = f"blog:{page}:{limit}"
+    cached_data: BlogPaginationRead | None = get_cached_data(key=cache_key)
+
+    if cached_data:
+        return BlogPaginationRead(
+            success=True,
+            message="Blogs retrieved successfully",
+            data=BlogPaginationData.model_validate(obj=cached_data),
+        )
+
     results: BasePaginationData[Blog] = await blog_service.read_all(
         db_session=db_session,
         order_by=order_by,
@@ -250,6 +262,13 @@ async def read_blogs(
         limit=limit,
         search_by=search_by,
         search_query=search_query,
+    )
+
+    # Set the cache
+    set_cached_data(
+        cache_key,
+        results.model_dump(),
+        expire=60 * 60,  # Cache for 1 hour
     )
 
     return BlogPaginationRead(
