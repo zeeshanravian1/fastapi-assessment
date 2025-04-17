@@ -1,0 +1,78 @@
+[project]
+name = "fastapi-assessment"
+version = "0.1.0"
+description = "FastAPI Assessment"
+authors = [
+    {name = "Zeeshan Asim",email = "zeeshanravian1@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[all]>=0.115.12",
+]
+
+[dependency-groups]
+dev = [
+    "bandit>=1.8.3",
+    "black>=25.1.0",
+    "coverage>=7.8.0",
+    "gitlint>=0.19.1",
+    "httpie>=3.2.4",
+    "ipykernel>=6.29.5",
+    "jupyter>=1.1.1",
+    "logfire>=3.14.0",
+    "mypy>=1.15.0",
+    "pre-commit>=4.2.0",
+    "pyright>=1.1.399",
+    "pytest-asyncio>=0.26.0",
+    "python-lsp-server[all]>=1.12.2",
+    "pyupgrade>=3.19.1",
+    "radon>=6.0.1",
+    "ruff>=0.11.5",
+]
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "class"
+
+[tool.mypy]
+strict = true
+exclude = ["venv", ".venv", "alembic"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 79
+
+[tool.ruff.lint]
+extend-select = [
+    "D",        # pydocstyle
+    "E",        # pycodestyle errors
+    "W",        # pycodestyle warnings
+    "F",        # pyflakes
+    "I",        # isort
+    "B",        # flake8-bugbear
+    "C4",       # flake8-comprehensions
+    "UP",       # pyupgrade
+    "ARG001",   # unused arguments in functions
+    "RUF",      # ruff dev's own rules
+    "SIM",      # pyflakes simplicity
+    "C90",      # more complexity rules
+]
+ignore = [
+    "E501",     # line too long, handled by black
+    "B008",     # do not perform function calls in argument defaults
+    "W191",     # indentation contains tabs
+    "B904",     # Allow raising exceptions without from e, for HTTPException
+]
+
+[tool.ruff.lint.pyupgrade]
+# Preserve types, even if a file imports `from __future__ import annotations`.
+keep-runtime-typing = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+split-on-trailing-comma = false
