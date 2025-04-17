@@ -1,0 +1,57 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DATABASE=postgresql+psycopg
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=blog_db
+      - PROJECT_TITLE=FastAPI Assessment
+      - PROJECT_DESCRIPTION=FastAPI Assessment Backend Documentation
+      - FRONTEND_HOST=http://localhost:3000
+      - ALGORITHM=HS256
+      - SECRET_KEY=LgRjP9oGHV01paeZX1VlbYDjJp8dDbCD6Wm0Z8kKifA
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SUPERUSER_NAME=Admin
+      - SUPERUSER_EMAIL=admin@email.com
+      - SUPERUSER_PASSWORD=Admin@123
+      - SUPERUSER_ROLE=admin
+      - SUPERUSER_ROLE_DESCRIPTION=Admin Role Description
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=blog_db
+    ports:
+      - "5433:5432"  # Changed to avoid conflicts with your host's Postgres
+
+  redis:
+    image: redis:7
+    ports:
+      - "6380:6379"  # Changed to avoid conflicts with your host's Redis
+
+  nginx:
+    image: nginx:1.25
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
