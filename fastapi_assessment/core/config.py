@@ -75,7 +75,7 @@ class Settings(BaseSettings):
     PROJECT_DESCRIPTION: str
     SENTRY_DSN: HttpUrl | None = None
     API_VERSION: str = "0.1.0"
-    API_V1_STR: str = "/api/v1"
+    API_V1_STR: str = "v1"
     FRONTEND_HOST: str
 
     DOCS_URL: str = "/docs"
